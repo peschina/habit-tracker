@@ -1,5 +1,13 @@
 # Habit Tracker
 
+Next features:
+-log in
+-keep track of records
+-undo button
+-possibility to delete a specific record
+-possibility to delete an habit
+-habit card
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -1,5 +1,6 @@
 import React from "react";
 import HabitsComponent from "./HabitsComponent";
+import { ListGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 
 class Habits extends React.Component {
   constructor() {
@@ -59,24 +60,30 @@ class Habits extends React.Component {
       const name = item.name;
       const key = this.state.habits.indexOf(item);
       return (
-        <li key={key}>
-          {name}
-          <input
-            type="text"
-            data-index={key}
-            value={this.state.habits[key].istanceTime}
-            onChange={this.handleChange}
-          />
-          <button
-            type="button"
-            index={key}
-            value="+"
-            onClick={this.handleClick}
-          >
-            {" "}
-            +{" "}
-          </button>
-        </li>
+        <ListGroup.Item as="li" key={key}>
+          <Row>
+            <Col>{name}</Col>
+            <Col>
+              <FormControl
+                type="text"
+                data-index={key}
+                value={this.state.habits[key].istanceTime}
+                onChange={this.handleChange}
+              />
+            </Col>
+            <Col>
+              <Button
+                variant="success"
+                index={key}
+                value="+"
+                onClick={this.handleClick}
+              >
+                {" "}
+                +{" "}
+              </Button>
+            </Col>
+          </Row>
+        </ListGroup.Item>
       );
     });
     return list;
@@ -96,6 +103,9 @@ class Habits extends React.Component {
 
   //call post when this.state.isAdding === true
   //data to post is this.state.toAdd, with totalTime as 00:00
+
+  // add property to state, to determine whether to call put or not
+  // (change boolean when plus button is clicked, and pass id)
 
   render() {
     return this.state.loading ? (

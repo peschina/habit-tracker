@@ -6,7 +6,7 @@ import { Container } from "react-bootstrap";
 class App extends Component {
   render() {
     return (
-      <Container>
+      <Container className="text-center">
         <Header />
         <Habits />
       </Container>

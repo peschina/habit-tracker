@@ -1,4 +1,5 @@
 import React from "react";
+import { ListGroup, Row, Col } from "react-bootstrap";
 
 function toMinutes(time) {
   const str = time.split(":");
@@ -18,7 +19,14 @@ function ListResult(props) {
 
   const list = habits.map(item => {
     const key = habits.indexOf(item);
-    return <li key={key}>{item.name + " " + item.totalTime}</li>;
+    return (
+      <ListGroup.Item as="li" key={key}>
+        <Row>
+          <Col>{item.name}</Col>
+          <Col>{item.totalTime}</Col>
+        </Row>
+      </ListGroup.Item>
+    );
   });
   return list;
 }

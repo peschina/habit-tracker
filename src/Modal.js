@@ -1,22 +1,25 @@
 import React from "react";
 import ListResult from "./ListResult";
-import "./modal.css";
+import { Modal, ListGroup, Button } from "react-bootstrap";
 
-function Modal(props) {
-  const handleClose = props.handleClose;
-  let show = props.show;
-  const habits = props.data;
-
+function FancyModal(props) {
   return (
-    <div className={show ? "modal display-block" : "modal display-none"}>
-      <section className="modal-main">
-        <ul>
-          <ListResult habits={habits} />
-        </ul>
-        <button onClick={handleClose}>close</button>
-      </section>
-    </div>
+    <Modal show={props.show} onHide={props.handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title style={{ color: "forestgreen" }}>Habits</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <ListGroup>
+          <ListResult habits={props.data} />
+        </ListGroup>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={props.handleClose}>
+          close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
-export default Modal;
+export default FancyModal;
