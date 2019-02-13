@@ -7,14 +7,15 @@ class Habits extends React.Component {
     super();
     this.state = {
       habits: [
-        { name: "russian", istanceTime: "00:00", totalTime: "02:00" },
-        { name: "crochet", istanceTime: "00:00", totalTime: "07:00" },
-        { name: "reading", istanceTime: "00:00", totalTime: "04:00" },
-        { name: "gym", istanceTime: "00:00", totalTime: "05:00" }
+        { id: 0, name: "russian", istanceTime: "00:00", totalTime: "02:00" },
+        { id: 1, name: "crochet", istanceTime: "00:00", totalTime: "07:00" },
+        { id: 2, name: "reading", istanceTime: "00:00", totalTime: "04:00" },
+        { id: 3, name: "gym", istanceTime: "00:00", totalTime: "05:00" }
       ],
       loading: false,
       isAdding: false,
-      toAdd: ""
+      toAdd: "",
+      shouldUpdate: { update: false, id: null }
     };
     this.createLi = this.createLi.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -34,31 +35,45 @@ class Habits extends React.Component {
 
   handleChange(event) {
     const { value } = event.target;
-    const newHabits = [...this.state.habits];
-    const key = event.target.getAttribute("data-index");
-    newHabits[key].istanceTime = value;
-    this.setState({ habits: newHabits });
+    const key = event.target.getAttribute("data-id");
+    const habitsUpdated = this.state.habits.map(item => {
+      if (item.id == key) {
+        item.istanceTime = value;
+        return item;
+      } else {
+        return item;
+      }
+    });
+    console.log(habitsUpdated);
+    this.setState({ habits: habitsUpdated });
   }
 
   handleClick(event) {
     const newHabits = [...this.state.habits];
-    const key = event.target.getAttribute("index");
-    const strIn = newHabits[key].istanceTime.split(":");
+    const id = event.target.getAttribute("id");
+    let habit = newHabits.filter(item => item.id == id);
+    const strIn = habit[0].istanceTime.split(":");
     const minutesIns = parseInt(strIn[0], 10) * 60 + parseInt(strIn[1], 10);
-    const strTot = newHabits[key].totalTime.split(":");
+    const strTot = habit[0].totalTime.split(":");
     const minutesTot = parseInt(strTot[0], 10) * 60 + parseInt(strTot[1], 10);
     var h = Math.floor((minutesIns + minutesTot) / 60);
     var m = (minutesIns + minutesTot) % 60;
     h = h < 10 ? "0" + h : h;
     m = m < 10 ? "0" + m : m;
-    newHabits[key].totalTime = (h + ":" + m).toString();
-    this.setState({ habits: newHabits });
+    habit[0].totalTime = (h + ":" + m).toString();
+    this.setState({
+      habits: newHabits,
+      shouldUpdate: {
+        update: true,
+        id: id
+      }
+    });
   }
 
   createLi() {
     const list = this.state.habits.map(item => {
       const name = item.name;
-      const key = this.state.habits.indexOf(item);
+      const key = item.id;
       return (
         <ListGroup.Item as="li" key={key}>
           <Row>
@@ -66,15 +81,15 @@ class Habits extends React.Component {
             <Col>
               <FormControl
                 type="text"
-                data-index={key}
-                value={this.state.habits[key].istanceTime}
+                data-id={key}
+                value={item.istanceTime}
                 onChange={this.handleChange}
               />
             </Col>
             <Col>
               <Button
                 variant="success"
-                index={key}
+                id={key}
                 value="+"
                 onClick={this.handleClick}
               >
@@ -102,10 +117,12 @@ class Habits extends React.Component {
     }}*/
 
   //call post when this.state.isAdding === true
-  //data to post is this.state.toAdd, with totalTime as 00:00
+  //data to post is this.state.toAdd, with totalTime as 00:00, id of new habit is this.state.habits.length
 
-  // add property to state, to determine whether to call put or not
-  // (change boolean when plus button is clicked, and pass id)
+  // call put if this.state.shouldUpdate.update === true
+  // data to put is totalTime of habit with said id (consider to add totalTime property to shouldUpdate)
+  // update totalTime only after response from server (change current implementation)
+  // reset shouldUpdate to false and id to null
 
   render() {
     return this.state.loading ? (
