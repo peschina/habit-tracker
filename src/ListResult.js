@@ -1,6 +1,7 @@
 import React from "react";
 import { ListGroup, Row, Col } from "react-bootstrap";
 
+// transforms time from 00:00 string to minutes
 function toMinutes(time) {
   const str = time.split(":");
   const h = parseInt(str[0], 10);
@@ -11,6 +12,7 @@ function toMinutes(time) {
 function ListResult(props) {
   const habits = props.habits;
 
+  // sort array from habit with more minutes to habit with less minutes
   habits.sort((a, b) => {
     a = toMinutes(a.totalTime);
     b = toMinutes(b.totalTime);
@@ -18,7 +20,7 @@ function ListResult(props) {
   });
 
   const list = habits.map(item => {
-    const key = habits.indexOf(item);
+    const key = habits.item.id;
     return (
       <ListGroup.Item as="li" key={key}>
         <Row>
