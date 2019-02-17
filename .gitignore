@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Visual Studio cache/options directory
+.vs/
+
+# Build results
+[Bb]in/
+[Oo]bj/
