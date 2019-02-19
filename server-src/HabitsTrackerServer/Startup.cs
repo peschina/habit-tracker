@@ -22,6 +22,7 @@ namespace HabitsTrackerServer
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<HabitsContext>(options => options.UseInMemoryDatabase("Habits"));
+            services.AddCors();
             //DbContextOptionsBuilder.EnableSensitiveDataLogging
         }
 
@@ -33,6 +34,8 @@ namespace HabitsTrackerServer
                 app.UseDeveloperExceptionPage();
             }
 
+            //TODO: remember to fix this in release
+            app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseMvc();
         }
     }
