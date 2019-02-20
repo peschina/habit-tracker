@@ -35,7 +35,9 @@ namespace HabitsTrackerServer
             }
 
             //TODO: remember to fix this in release
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors(builder => builder.AllowAnyOrigin()
+                                            .AllowAnyMethod()
+                                            .AllowAnyHeader());
             app.UseMvc();
         }
     }
