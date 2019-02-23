@@ -12,7 +12,7 @@ namespace HabitsTrackerServer.Models
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
         [JsonProperty(PropertyName = "instanceTime")]
-        public string InstanceTime { get; set; }
+        public string InstanceTime { get; set; } = "00:00";
         [Required(ErrorMessage = "totalTime is required")]
         [JsonProperty(PropertyName = "totalTime")]
         public string TotalTime { get; set; }
