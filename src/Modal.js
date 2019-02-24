@@ -10,7 +10,7 @@ function FancyModal(props) {
       </Modal.Header>
       <Modal.Body>
         <ListGroup>
-          <ListResult habits={props.data} />
+          <ListResult habits={props.habits} />
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>

@@ -1,6 +1,7 @@
 import React from "react";
 import { FormControl, Form, Button, Row, Col } from "react-bootstrap";
 
+// creates an input for writing down the habit to be added and a button that triggers the event
 function AddHabit(props) {
   return (
     <Form>

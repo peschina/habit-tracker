@@ -1,10 +1,14 @@
 # Habit Tracker
 
+bugs that need to be fixed:
+
+- adjust graphics when there are no habits to display (maybe return a div and not null)
+- add control on input to add time dedicated to habit, so user can only type numbers to display time
+- add control so "Add" button cannot be clicked when input has no value
+
 Next features:
-- log in
-- keep track of records
-- undo button
-- possibility to delete a specific record
+
+- undo button (maybe)
 - possibility to delete an habit
 - habit card
 

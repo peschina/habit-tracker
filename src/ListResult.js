@@ -11,6 +11,9 @@ function toMinutes(time) {
 
 function ListResult(props) {
   const habits = props.habits;
+  if (habits == null || habits.length === 0) {
+    return <div>No habit to show</div>;
+  }
 
   // sort array from habit with more minutes to habit with less minutes
   habits.sort((a, b) => {
@@ -19,8 +22,9 @@ function ListResult(props) {
     return a > b ? -1 : a < b ? 1 : 0;
   });
 
+  // return a li that dislays name and totalTime for each habit
   const list = habits.map(item => {
-    const key = habits.item.id;
+    const key = item.id;
     return (
       <ListGroup.Item as="li" key={key}>
         <Row>

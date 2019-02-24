@@ -6,30 +6,63 @@ class Habits extends React.Component {
   constructor() {
     super();
     this.state = {
-      habits: [
-        { id: 0, name: "russian", istanceTime: "00:00", totalTime: "02:00" },
-        { id: 1, name: "crochet", istanceTime: "00:00", totalTime: "07:00" },
-        { id: 2, name: "reading", istanceTime: "00:00", totalTime: "04:00" },
-        { id: 3, name: "gym", istanceTime: "00:00", totalTime: "05:00" }
-      ],
+      habits: [],
       loading: false,
-      isAdding: false,
       toAdd: "",
-      shouldUpdate: { update: false, id: null }
+      show: false
     };
     this.createLi = this.createLi.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+  }
+
+  showModal() {
+    this.setState({ show: true });
+  }
+
+  hideModal() {
+    this.setState({ show: false });
   }
 
   handleSubmit() {
-    this.setState({ isAdding: true });
+    //data to post is this.state.toAdd, with totalTime setted as "00:00"
+    // id of new habit is set by server
+    const value = this.state.toAdd;
+    const element = {
+      name: value,
+      totalTime: "00:00"
+    };
+    // call POST, response is new habit
+    this.setState({ loading: true });
+    fetch("http://localhost:5000/api/habits", {
+      method: "post",
+      body: JSON.stringify(element),
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          const e = Response.error();
+          console.log(e);
+        }
+      })
+      // add response (new habit) to state
+      .then(response => {
+        const newHabits = [...this.state.habits, response];
+        this.setState({ habits: newHabits });
+      })
+      .catch(error => console.log("there is an error:", error));
+    this.setState({ loading: false, toAdd: "" });
   }
 
   handleAdd(event) {
     const { value } = event.target;
+    // store the input value into state (will need it when POST is called)
     this.setState({ toAdd: value });
   }
 
@@ -38,39 +71,55 @@ class Habits extends React.Component {
     const key = event.target.getAttribute("data-id");
     const habitsUpdated = this.state.habits.map(item => {
       if (item.id == key) {
-        item.istanceTime = value;
+        item.instanceTime = value;
         return item;
       } else {
         return item;
       }
     });
-    console.log(habitsUpdated);
     this.setState({ habits: habitsUpdated });
   }
 
   handleClick(event) {
     const newHabits = [...this.state.habits];
     const id = event.target.getAttribute("id");
-    let habit = newHabits.filter(item => item.id == id);
-    const strIn = habit[0].istanceTime.split(":");
+    // extract current habit from all habits
+    let habit = newHabits.filter(item => item.id == id)[0];
+    // convert time strings to minutes
+    const strIn = habit.instanceTime.split(":");
     const minutesIns = parseInt(strIn[0], 10) * 60 + parseInt(strIn[1], 10);
-    const strTot = habit[0].totalTime.split(":");
+    const strTot = habit.totalTime.split(":");
     const minutesTot = parseInt(strTot[0], 10) * 60 + parseInt(strTot[1], 10);
+    // sum instanceTime and totalTime, then convert totalTime back to string
     var h = Math.floor((minutesIns + minutesTot) / 60);
     var m = (minutesIns + minutesTot) % 60;
     h = h < 10 ? "0" + h : h;
     m = m < 10 ? "0" + m : m;
-    habit[0].totalTime = (h + ":" + m).toString();
-    this.setState({
-      habits: newHabits,
-      shouldUpdate: {
-        update: true,
-        id: id
-      }
-    });
+    habit.totalTime = (h + ":" + m).toString();
+    // reset instanceTime
+    habit.instanceTime = "00:00";
+
+    // call PUT to update habit (pass updated totalTime to server)
+    this.setState({ loading: true });
+    fetch(`http://localhost:5000/api/habits/${id}`, {
+      method: "put",
+      body: JSON.stringify(habit),
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(response => {
+        if (response.ok) {
+          // update state with new totalTime and resetted instanceTime
+          this.setState({ habits: newHabits, loading: false });
+        } else {
+          console.log(response.json().errors);
+        }
+      })
+      .catch(error => console.log("there is an error:", error));
   }
 
   createLi() {
+    // for each habit return a li that displays name,
+    // an input for time dedicated to habit that can be added and a button to trigger the event
     const list = this.state.habits.map(item => {
       const name = item.name;
       const key = item.id;
@@ -82,7 +131,7 @@ class Habits extends React.Component {
               <FormControl
                 type="text"
                 data-id={key}
-                value={item.istanceTime}
+                value={item.instanceTime}
                 onChange={this.handleChange}
               />
             </Col>
@@ -104,25 +153,17 @@ class Habits extends React.Component {
     return list;
   }
 
-  /*{   componentDidMount() {
-        this.setState({loading: true});
-        fetch("url apina")
-        .then(response => {if (response.ok) response.json()
-        else throw new Error("something went wrong") })
-        // nel caso modificare response
-        .then(data => this.setState({habits: data, loading: false}))
-        se in data manca l'istanceTime valutare come risettare habits (tenere il vecchio valore di istanceTime usando
-        l'arrow function e aggiornare solo gli altri campi?)
-        .catch(error => console.log("there is an error"))
-    }}*/
-
-  //call post when this.state.isAdding === true
-  //data to post is this.state.toAdd, with totalTime as 00:00, id of new habit is this.state.habits.length
-
-  // call put if this.state.shouldUpdate.update === true
-  // data to put is totalTime of habit with said id (consider to add totalTime property to shouldUpdate)
-  // update totalTime only after response from server (change current implementation)
-  // reset shouldUpdate to false and id to null
+  componentDidMount() {
+    // call GET to update state with all habits
+    this.setState({ loading: true });
+    fetch("http://localhost:5000/api/habits")
+      .then(response => response.json())
+      .then(response => {
+        this.setState({ habits: response });
+      })
+      .catch(error => console.log("there is an error: ", error));
+    this.setState({ loading: false });
+  }
 
   render() {
     return this.state.loading ? (
@@ -133,7 +174,10 @@ class Habits extends React.Component {
         handleSubmit={this.handleSubmit}
         toAdd={this.state.toAdd}
         createLi={this.createLi()}
-        habits={[...this.state.habits]}
+        habits={this.state.habits}
+        show={this.state.show}
+        handleClose={this.hideModal}
+        showModal={this.showModal}
       />
     );
   }

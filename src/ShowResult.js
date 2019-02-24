@@ -2,9 +2,7 @@ import React from "react";
 import FancyModal from "./Modal";
 import { Button, Form } from "react-bootstrap";
 
-// return Modal, a component that displays a list with all habits and the total time dedicated to each one,
-// ordered from the most performed to the least performed
-function ShowResultComponent(props) {
+function ShowResult(props) {
   return (
     <Form>
       <Button variant="success" onClick={props.onClick}>
@@ -13,10 +11,10 @@ function ShowResultComponent(props) {
       <FancyModal
         handleClose={props.handleClose}
         show={props.show}
-        data={props.data}
+        habits={props.habits}
       />
     </Form>
   );
 }
 
-export default ShowResultComponent;
+export default ShowResult;
