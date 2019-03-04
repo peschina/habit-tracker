@@ -16,14 +16,21 @@ function HabitsComponent(props) {
         />
       </Container>
       <Container className="text-center">
-        <ListHabits createLi={props.createLi} habits={props.habits} />
+        <ListHabits
+          createLi={props.createLi}
+          habits={props.habits}
+          showHabit={props.showHabit}
+          closeModal={props.closeModal}
+          delete={props.delete}
+          habitToShow={props.habitToShow}
+        />
       </Container>
       <Container className="mt-3 mb-3">
         <ShowResult
           habits={props.habits}
           handleClose={props.handleClose}
-          show={props.show}
-          onClick={props.showModal}
+          showResult={props.showResult}
+          onClick={props.showModalResult}
         />
       </Container>
     </Container>

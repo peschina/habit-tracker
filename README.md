@@ -5,6 +5,7 @@ bugs that need to be fixed:
 - adjust graphics when there are no habits to display (maybe return a div and not null)
 - add control on input to add time dedicated to habit, so user can only type numbers to display time
 - add control so "Add" button cannot be clicked when input has no value
+- add control on input to add habit (habit name has to contain letters?)
 
 Next features:
 

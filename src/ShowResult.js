@@ -1,5 +1,5 @@
 import React from "react";
-import FancyModal from "./Modal";
+import ModalResult from "./ModalResult";
 import { Button, Form } from "react-bootstrap";
 
 function ShowResult(props) {
@@ -8,9 +8,9 @@ function ShowResult(props) {
       <Button variant="success" onClick={props.onClick}>
         Show results
       </Button>
-      <FancyModal
+      <ModalResult
         handleClose={props.handleClose}
-        show={props.show}
+        showResult={props.showResult}
         habits={props.habits}
       />
     </Form>
