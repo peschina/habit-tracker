@@ -1,5 +1,5 @@
 import React from "react";
-import ShowResult from "./ShowResult";
+import ShowResult from "./Result/ShowResult";
 import AddHabit from "./AddHabit";
 import ListHabits from "./ListHabits";
 import { Container } from "react-bootstrap";

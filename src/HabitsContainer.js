@@ -60,6 +60,7 @@ class Habits extends React.Component {
       checkUpperCase === true
     ) {
       alert("This habit already exists");
+      this.setState({ toAdd: "" });
       return;
     }
 
@@ -109,7 +110,7 @@ class Habits extends React.Component {
       }
     });
     this.setState({ habits: habitsUpdated });
-    }
+  }
 
   handleClick(event) {
     const newHabits = [...this.state.habits];
@@ -178,8 +179,9 @@ class Habits extends React.Component {
       .then(response => {
         if (response.ok) {
           alert("habit has been deleted");
-          const habits = this.state.habits;
-          habits.splice(habits.indexOf(habit));
+          let newHabits = [...this.state.habits];
+          newHabits = newHabits.filter(item => item !== habit);
+          this.setState({ habits: newHabits });
         } else if (response.status === 404) {
           alert("the habit has already been deleted");
         } else {
