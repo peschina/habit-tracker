@@ -1,20 +1,20 @@
 import React from "react";
-import ListResult from "./ListResult";
+import ListResult from "./listResult";
 import { Modal, ListGroup, Button } from "react-bootstrap";
 
-function ModalResult(props) {
+function ModalResult({ show, habits, onClose }) {
   return (
-    <Modal show={props.showResult} onHide={props.handleClose}>
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title style={{ color: "forestgreen" }}>Habits</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <ListGroup>
-          <ListResult habits={props.habits} />
+          <ListResult habits={habits} />
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={props.handleClose}>
+        <Button variant="secondary" onClick={onClose}>
           close
         </Button>
       </Modal.Footer>

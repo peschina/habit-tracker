@@ -1,37 +1,34 @@
 import React from "react";
-import ShowResult from "./Result/ShowResult";
-import AddHabit from "./AddHabit";
-import ListHabits from "./ListHabits";
+import ShowResult from "./result/showResult";
+import AddHabit from "./addHabitForm/addHabit";
+import ListHabits from "./listHabits/listHabits";
 import { Container } from "react-bootstrap";
 
 // Habits has 3 child components: Add, List and Show
-function HabitsComponent(props) {
+function HabitsComponent({
+  toAdd,
+  habits,
+  onDelete,
+  onAddHabit,
+  onSubmit,
+  onChange,
+  onSubmitChange
+}) {
   return (
     <Container>
       <Container className="mt-3 mb-3">
-        <AddHabit
-          handleAdd={props.handleAdd}
-          handleSubmit={props.handleSubmit}
-          toAdd={props.toAdd}
-        />
+        <AddHabit toAdd={toAdd} onAddHabit={onAddHabit} onSubmit={onSubmit} />
       </Container>
       <Container className="text-center">
         <ListHabits
-          createLi={props.createLi}
-          habits={props.habits}
-          showHabit={props.showHabit}
-          closeModal={props.closeModal}
-          delete={props.delete}
-          habitToShow={props.habitToShow}
+          habits={habits}
+          onDelete={onDelete}
+          onChange={onChange}
+          onSubmitChange={onSubmitChange}
         />
       </Container>
       <Container className="mt-3 mb-3">
-        <ShowResult
-          habits={props.habits}
-          handleClose={props.handleClose}
-          showResult={props.showResult}
-          onClick={props.showModalResult}
-        />
+        <ShowResult habits={habits} />
       </Container>
     </Container>
   );

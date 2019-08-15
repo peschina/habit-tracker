@@ -1,19 +1,9 @@
 import React from "react";
 import { ListGroup, Row, Col } from "react-bootstrap";
+import { toMinutes } from "../utils";
 
-// transforms time from 00:00 string to minutes
-function toMinutes(time) {
-  const str = time.split(":");
-  const h = parseInt(str[0], 10);
-  const m = parseInt(str[1], 10);
-  return h * 60 + m;
-}
-
-function ListResult(props) {
-  const habits = props.habits;
-  if (habits == null || habits.length === 0) {
-    return <div>No habit to show</div>;
-  }
+function ListResult({ habits }) {
+  if (!habits || habits.length === 0) return <div>No habit to show</div>;
 
   // sort array from habit with more minutes to habit with less minutes
   habits.sort((a, b) => {
@@ -24,12 +14,12 @@ function ListResult(props) {
 
   // return a li that dislays name and totalTime for each habit
   const list = habits.map(item => {
-    const key = item.id;
+    const { id: key, name, totalTime } = item;
     return (
-      <ListGroup.Item as="li" key={key}>
+      <ListGroup.Item key={key}>
         <Row>
-          <Col>{item.name}</Col>
-          <Col>{item.totalTime}</Col>
+          <Col>{name}</Col>
+          <Col>{totalTime}</Col>
         </Row>
       </ListGroup.Item>
     );
